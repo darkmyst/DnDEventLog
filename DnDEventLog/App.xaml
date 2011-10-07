@@ -1,0 +1,54 @@
+﻿<Application x:Class="DnDEventLog.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:DnDEventLog"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <DataTemplate x:Key="EditableActorEffectTemplate" DataType="{x:Type local:ActorEffect}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Width="20" Height="20" Background="{Binding BackgroundColor}" BorderBrush="#7000" BorderThickness="1">
+                    <Viewbox>
+                        <TextBlock Text="{Binding Code}" ToolTip="{Binding Name}" Foreground="{Binding ForegroundColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Viewbox>
+                </Border>
+                <TextBox Grid.Column="1" Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" TextWrapping="Wrap" MaxHeight="50" Margin="2,0" Width="360" />
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="GenericActorEffectTemplate" DataType="{x:Type local:ActorEffect}">
+            <StackPanel Orientation="Horizontal">
+                <Border Width="20" Height="20" Background="{Binding BackgroundColor}" BorderBrush="#7000" BorderThickness="1">
+                    <Viewbox>
+                        <TextBlock Text="{Binding Code}" Foreground="{Binding ForegroundColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Viewbox>
+                </Border>
+                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="5,0" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type local:ActorEffect}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Width="20" Height="20" Background="{Binding BackgroundColor}" BorderBrush="#7000" BorderThickness="1">
+                    <Viewbox>
+                        <TextBlock Text="{Binding Code}" ToolTip="{Binding Name}" Foreground="{Binding ForegroundColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Viewbox>
+                </Border>
+                <TextBlock Grid.Column="1" Text="{Binding Notes}" VerticalAlignment="Center" TextWrapping="Wrap" MaxHeight="50" Margin="2,0" TextTrimming="CharacterEllipsis">
+                <TextBlock.ToolTip>
+                    <ToolTip MaxWidth="300">
+                        <TextBlock Text="{Binding Notes}" TextWrapping="Wrap" />
+                    </ToolTip>
+                </TextBlock.ToolTip>
+            </TextBlock>
+            </Grid>
+        </DataTemplate>
+    </Application.Resources>
+</Application>

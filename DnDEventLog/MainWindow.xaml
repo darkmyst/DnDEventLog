@@ -1,0 +1,108 @@
+﻿<Window x:Class="DnDEventLog.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:DnDEventLog"
+        Title="MainWindow" Height="450" Grid.IsSharedSizeScope="True" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <local:InitiativeAndEventTrackerViewModel x:Key="ViewModel" />
+
+        <DataTemplate x:Key="ActorInitiativeTemplate" DataType="local:Actor">
+            <Border x:Name="actorRoot" BorderThickness="0.5" BorderBrush="#A000">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition SharedSizeGroup="ActorInitiativeListEnable" />
+                        <ColumnDefinition SharedSizeGroup="ActorInitiativeListName" />
+                        <ColumnDefinition SharedSizeGroup="ActorInitiativeListInitiative" />
+                        <ColumnDefinition SharedSizeGroup="ActorInitiativeListEffects" />
+                        <ColumnDefinition SharedSizeGroup="ActorInitiativeListNotes" />
+                        <ColumnDefinition SharedSizeGroup="ActorInitiativeListEditDelete" />
+                    </Grid.ColumnDefinitions>
+
+                    <CheckBox IsChecked="{Binding IsEnabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2,0,-2,0" />
+                    <TextBlock x:Name="NameLBL" Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding Initiative}" Grid.Column="2"  VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    <Border Grid.Column="3">
+                        <ItemsControl x:Name="EffectsIC" ItemsSource="{Binding Effects}" />
+                    </Border>
+                    <TextBlock Text="{Binding Notes}" Grid.Column="4" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"  VerticalAlignment="Center" MaxHeight="100">
+                        <TextBlock.ToolTip>
+                            <ToolTip MaxWidth="300">
+                                <TextBlock Text="{Binding Notes}" TextWrapping="Wrap" />
+                            </ToolTip>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
+                    <UniformGrid Rows="1" Grid.Column="5" VerticalAlignment="Center">
+                        <ToggleButton x:Name="btnDelay" Content="Delay" IsChecked="{Binding IsDelayed, Mode=TwoWay}" Margin="2" Focusable="False" />
+                        <Button Content="Edit" Command="{Binding EditActorCommand, Source={StaticResource ViewModel}}" CommandParameter="{Binding}" Margin="2" Focusable="False" />
+                        <Button Content="Delete" Command="{Binding DeleteActorCommand, Source={StaticResource ViewModel}}" CommandParameter="{Binding}" Margin="2" Focusable="False" />
+                    </UniformGrid>
+                </Grid>
+            </Border>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding IsPlayer}" Value="True">
+                    <Setter TargetName="NameLBL" Property="FontWeight" Value="Bold" />
+                    <Setter TargetName="NameLBL" Property="FontSize" Value="14" />
+                    <Setter TargetName="actorRoot" Property="Background" Value="#1000FF00" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsPlayer}" Value="False">
+                    <Setter TargetName="actorRoot" Property="Background" Value="#10FF0000" />
+                </DataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding HasInitiative}" Value="False" />
+                        <Condition Binding="{Binding IsDelayed}" Value="False" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="btnDelay" Property="Visibility" Value="Hidden" />
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding HasInitiative}" Value="True" />
+                        <Condition Binding="{Binding IsDelayed}" Value="False" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="actorRoot" Property="Background" Value="Yellow" />
+                </MultiDataTrigger>
+                <DataTrigger Binding="{Binding IsDelayed}" Value="True">
+                    <Setter TargetName="actorRoot" Property="Background" Value="#CCE" />
+                    <Setter TargetName="btnDelay" Property="Content" Value="Delayed" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                    <Setter TargetName="actorRoot" Property="Background" Value="#DDD" />
+                    <Setter TargetName="NameLBL" Property="Foreground" Value="#A00" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid DataContext="{Binding Source={StaticResource ViewModel}}">
+        <StackPanel>
+            <UniformGrid Rows="1">
+                <Label HorizontalAlignment="Center" Content="Current Round" />
+                <Label HorizontalAlignment="Center" Content="Current Initiative" />
+            </UniformGrid>
+            <UniformGrid Rows="1">
+                <Label HorizontalAlignment="Center" Content="{Binding CurrentRound}" />
+                <Label HorizontalAlignment="Center" Content="{Binding CurrentInitiative}" />
+            </UniformGrid>
+            <UniformGrid Rows="1">
+                <Button Command="{Binding AddActorCommand}" Content="Add Actor" Margin="2" Focusable="False" />
+                <Button Command="{Binding NextInitiativeCommand}" Content="Next Init" IsDefault="True" Margin="2" Focusable="False"  />
+                <Button Command="{Binding ResetCombatCommand}" Content="Reset Combat" Margin="2" Focusable="False"  />
+            </UniformGrid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30" SharedSizeGroup="ActorInitiativeListEnable" />
+                    <ColumnDefinition Width="120" SharedSizeGroup="ActorInitiativeListName" />
+                    <ColumnDefinition Width="60" SharedSizeGroup="ActorInitiativeListInitiative" />
+                    <ColumnDefinition Width="200" SharedSizeGroup="ActorInitiativeListEffects" />
+                    <ColumnDefinition Width="290" SharedSizeGroup="ActorInitiativeListNotes" />
+                    <ColumnDefinition Width="155" SharedSizeGroup="ActorInitiativeListEditDelete" />
+                </Grid.ColumnDefinitions>
+                <Label Content="Name" Grid.Column="1" />
+                <Label Content="Initiative" Grid.Column="2" />
+                <Label Content="Effects" Grid.Column="3" />
+                <Label Content="Notes" Grid.Column="4" />
+            </Grid>
+            <ItemsControl ItemsSource="{Binding ActorsView}" ItemTemplate="{StaticResource ActorInitiativeTemplate}" />
+        </StackPanel>
+    </Grid>
+</Window>

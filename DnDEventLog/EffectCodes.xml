@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<EffectCodes>
+  <EffectCode Name="Bloodied" Code="B" BackgroundColor="#FF0000" ForegroundColor="White" />
+  <EffectCode Name="Prone" Code="P" BackgroundColor="#666666" ForegroundColor="Black" />
+  <EffectCode Name="Marked" Code="M" BackgroundColor="#0000FF" ForegroundColor="White" />
+</EffectCodes>
