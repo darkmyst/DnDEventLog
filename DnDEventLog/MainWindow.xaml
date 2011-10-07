@@ -7,35 +7,39 @@
         <local:InitiativeAndEventTrackerViewModel x:Key="ViewModel" />
 
         <DataTemplate x:Key="ActorInitiativeTemplate" DataType="local:Actor">
-            <Border x:Name="actorRoot" BorderThickness="0.5" BorderBrush="#A000">
+            <Border x:Name="actorRoot" BorderThickness="0.5" BorderBrush="#A000" Padding="2">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition SharedSizeGroup="ActorInitiativeListEnable" />
-                        <ColumnDefinition SharedSizeGroup="ActorInitiativeListName" />
-                        <ColumnDefinition SharedSizeGroup="ActorInitiativeListInitiative" />
+                        <ColumnDefinition SharedSizeGroup="ActorInitiativeListNameInitEnabled" />
                         <ColumnDefinition SharedSizeGroup="ActorInitiativeListEffects" />
                         <ColumnDefinition SharedSizeGroup="ActorInitiativeListNotes" />
-                        <ColumnDefinition SharedSizeGroup="ActorInitiativeListEditDelete" />
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-                    <CheckBox IsChecked="{Binding IsEnabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2,0,-2,0" />
-                    <TextBlock x:Name="NameLBL" Text="{Binding Name}" Grid.Column="1" VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding Initiative}" Grid.Column="2"  VerticalAlignment="Center" HorizontalAlignment="Center" />
-                    <Border Grid.Column="3">
+                    <TextBlock x:Name="NameLBL" Text="{Binding Name}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="2,0"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
+                        <CheckBox IsChecked="{Binding IsEnabled, Mode=TwoWay}" VerticalAlignment="Center" Margin="2,0" />
+                        <TextBlock Text="{Binding Initiative}" VerticalAlignment="Center" Margin="2,0" />
+                    </StackPanel>
+                    <UniformGrid Rows="1" Grid.Row="2" Grid.Column="0" VerticalAlignment="Top">
+                        <Button Content="Edit" Command="{Binding EditActorCommand, Source={StaticResource ViewModel}}" CommandParameter="{Binding}" Margin="2" Focusable="False" />
+                        <Button Content="Delete" Command="{Binding DeleteActorCommand, Source={StaticResource ViewModel}}" CommandParameter="{Binding}" Margin="2" Focusable="False" />
+                        <ToggleButton x:Name="btnDelay" Content="Delay" IsChecked="{Binding IsDelayed, Mode=TwoWay}" Margin="2" Focusable="False" />
+                    </UniformGrid>
+                    <Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" VerticalAlignment="Center">
                         <ItemsControl x:Name="EffectsIC" ItemsSource="{Binding Effects}" />
                     </Border>
-                    <TextBlock Text="{Binding Notes}" Grid.Column="4" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"  VerticalAlignment="Center" MaxHeight="100">
+                    <TextBlock Text="{Binding Notes}" Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"  VerticalAlignment="Center" MaxHeight="100">
                         <TextBlock.ToolTip>
                             <ToolTip MaxWidth="300">
                                 <TextBlock Text="{Binding Notes}" TextWrapping="Wrap" />
                             </ToolTip>
                         </TextBlock.ToolTip>
                     </TextBlock>
-                    <UniformGrid Rows="1" Grid.Column="5" VerticalAlignment="Center">
-                        <ToggleButton x:Name="btnDelay" Content="Delay" IsChecked="{Binding IsDelayed, Mode=TwoWay}" Margin="2" Focusable="False" />
-                        <Button Content="Edit" Command="{Binding EditActorCommand, Source={StaticResource ViewModel}}" CommandParameter="{Binding}" Margin="2" Focusable="False" />
-                        <Button Content="Delete" Command="{Binding DeleteActorCommand, Source={StaticResource ViewModel}}" CommandParameter="{Binding}" Margin="2" Focusable="False" />
-                    </UniformGrid>
                 </Grid>
             </Border>
             <DataTemplate.Triggers>
@@ -90,17 +94,13 @@
             </UniformGrid>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="30" SharedSizeGroup="ActorInitiativeListEnable" />
-                    <ColumnDefinition Width="120" SharedSizeGroup="ActorInitiativeListName" />
-                    <ColumnDefinition Width="60" SharedSizeGroup="ActorInitiativeListInitiative" />
-                    <ColumnDefinition Width="200" SharedSizeGroup="ActorInitiativeListEffects" />
-                    <ColumnDefinition Width="290" SharedSizeGroup="ActorInitiativeListNotes" />
-                    <ColumnDefinition Width="155" SharedSizeGroup="ActorInitiativeListEditDelete" />
+                    <ColumnDefinition Width="200" SharedSizeGroup="ActorInitiativeListNameInitEnabled" />
+                    <ColumnDefinition Width="250" SharedSizeGroup="ActorInitiativeListEffects" />
+                    <ColumnDefinition Width="300" SharedSizeGroup="ActorInitiativeListNotes" />
                 </Grid.ColumnDefinitions>
-                <Label Content="Name" Grid.Column="1" />
-                <Label Content="Initiative" Grid.Column="2" />
-                <Label Content="Effects" Grid.Column="3" />
-                <Label Content="Notes" Grid.Column="4" />
+                <Label Content="Name / Initiative" Grid.Column="0" />
+                <Label Content="Effects" Grid.Column="1" />
+                <Label Content="Notes" Grid.Column="2" />
             </Grid>
             <ItemsControl ItemsSource="{Binding ActorsView}" ItemTemplate="{StaticResource ActorInitiativeTemplate}" />
         </StackPanel>
