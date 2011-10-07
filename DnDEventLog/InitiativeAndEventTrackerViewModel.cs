@@ -8,6 +8,7 @@ using ReactiveUI.Xaml;
 using System.Windows.Data;
 using System.ComponentModel;
 using System.Reactive.Linq;
+using System.Windows;
 
 namespace DnDEventLog
 {
@@ -31,6 +32,15 @@ namespace DnDEventLog
         }
         #endregion
 
+        #region ActorObservableDisposables - Dictionary<Actor, List<IDisposable>>
+        private Dictionary<Actor, List<IDisposable>> _ActorObservableDisposables = new Dictionary<Actor, List<IDisposable>>();
+        public Dictionary<Actor, List<IDisposable>> ActorObservableDisposables
+        {
+            get { return _ActorObservableDisposables; }
+            set { _ActorObservableDisposables = this.RaiseAndSetIfChanged(x => x.ActorObservableDisposables, value); }
+        }
+        #endregion
+
         #region Events - ReactiveCollection<ActorEvent>
         private ReactiveCollection<ActorEvent> _Events = null;
         public ReactiveCollection<ActorEvent> Events
@@ -46,15 +56,6 @@ namespace DnDEventLog
         {
             get { return _CurrentRound; }
             set { _CurrentRound = this.RaiseAndSetIfChanged(x => x.CurrentRound, value); }
-        }
-        #endregion
-
-        #region ActorObservableDisposables - Dictionary<Actor, List<IDisposable>>
-        private Dictionary<Actor, List<IDisposable>> _ActorObservableDisposables = new Dictionary<Actor, List<IDisposable>>();
-        public Dictionary<Actor, List<IDisposable>> ActorObservableDisposables
-        {
-            get { return _ActorObservableDisposables; }
-            set { _ActorObservableDisposables = this.RaiseAndSetIfChanged(x => x.ActorObservableDisposables, value); }
         }
         #endregion
 
@@ -86,6 +87,11 @@ namespace DnDEventLog
             Actors = new ReactiveCollection<Actor>();
             Events = new ReactiveCollection<ActorEvent>();
 
+            InitializeCommands();
+        }
+
+        private void InitializeCommands()
+        {
             var addActorCommand = new ReactiveCommand();
             addActorCommand.Subscribe(_ => AddActor());
             AddActorCommand = addActorCommand;
@@ -107,31 +113,19 @@ namespace DnDEventLog
             NextInitiativeCommand = nextInitiativeCommand;
         }
 
-        private void DeleteActor(Actor actor)
+        private void InitializeCombat()
         {
-            if (actor != null)
+            CurrentRound = 0;
+            CurrentInitiative = null;
+            foreach (var actor in Actors.ToList())
             {
-                Actors.Remove(actor);
-                ActorsView.Refresh();
-
-                if (ActorObservableDisposables.ContainsKey(actor))
+                if (actor.IsPlayer)
                 {
-                    foreach (var disposable in ActorObservableDisposables[actor])
-                        disposable.Dispose();
-                    ActorObservableDisposables.Remove(actor);
+                    actor.Initiative = 0;
+                    actor.HasInitiative = false;
                 }
-            }
-        }
-
-        private void EditActor(Actor actor)
-        {
-            if (actor != null)
-            {
-                EditActor editActorWindow = new EditActor(actor);
-                editActorWindow.ShowDialog();
-                if (actor.Initiative == CurrentInitiative)
-                    actor.HasInitiative = true;
-                ActorsView.Refresh();
+                else
+                    Actors.Remove(actor);
             }
         }
 
@@ -180,19 +174,12 @@ namespace DnDEventLog
             }
         }
 
-        private void InitializeCombat()
+        private void SetActorInitiativeToCurrent(Actor actor)
         {
-            CurrentRound = 0;
-            CurrentInitiative = null;
-            foreach (var actor in Actors.ToList())
+            if (CurrentInitiative.HasValue)
             {
-                if (actor.IsPlayer)
-                {
-                    actor.Initiative = 0;
-                    actor.HasInitiative = false;
-                }
-                else 
-                    Actors.Remove(actor);
+                actor.Initiative = CurrentInitiative.Value;
+                RefreshActor(actor);
             }
         }
 
@@ -225,6 +212,37 @@ namespace DnDEventLog
             }
         }
 
+        private void EditActor(Actor actor)
+        {
+            if (actor != null)
+            {
+                EditActor editActorWindow = new EditActor(actor);
+                editActorWindow.ShowDialog();
+                if (actor.Initiative == CurrentInitiative)
+                    actor.HasInitiative = true;
+                ActorsView.Refresh();
+            }
+        }
+
+        private void DeleteActor(Actor actor)
+        {
+            if (actor != null 
+                && MessageBox.Show(string.Format("Are you sure you want to delete {0}", actor.Name), 
+                                   string.Format("Delete {0}?", actor.Name),
+                                   MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                Actors.Remove(actor);
+                ActorsView.Refresh();
+
+                if (ActorObservableDisposables.ContainsKey(actor))
+                {
+                    foreach (var disposable in ActorObservableDisposables[actor])
+                        disposable.Dispose();
+                    ActorObservableDisposables.Remove(actor);
+                }
+            }
+        }
+
         private void RefreshActor(Actor actor)
         {
             if (actor.IsDelayed || !actor.IsEnabled)
@@ -234,21 +252,5 @@ namespace DnDEventLog
 
             ActorsView.Refresh();
         }
-
-        private void SetActorInitiativeToCurrent(Actor actor)
-        {
-            if (CurrentInitiative.HasValue)
-            {
-                actor.Initiative = CurrentInitiative.Value;
-                RefreshActor(actor);
-            }
-        }
-
-
-
-
-
-
-
     }
 }
