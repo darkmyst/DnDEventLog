@@ -40,9 +40,55 @@ namespace DnDEventLog
             XDocument doc = XDocument.Load("EffectCodes.xml");
             foreach (var effectCodeNode in doc.Root.Elements("EffectCode"))
             {
-                Color bgColor = (Color)ColorConverter.ConvertFromString(effectCodeNode.Attribute("BackgroundColor").Value);
-                Color fgColor = (Color)ColorConverter.ConvertFromString(effectCodeNode.Attribute("ForegroundColor").Value);
+                string name;
+                string code;
+                Color bgColor;
+                Color fgColor;
 
+                try
+                {
+                    name = effectCodeNode.Attribute("Name").Value;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Effect with invalid name found");
+                    continue;
+                }
+                try
+                {
+                    code = effectCodeNode.Attribute("Code").Value;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Effect with invalid code found");
+                    continue;
+                }
+                try
+                {
+                    fgColor = (Color)ColorConverter.ConvertFromString(effectCodeNode.Attribute("ForegroundColor").Value);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(string.Format(@"Invalid foreground color ""{0}"" for effect ""{1}""",
+                        effectCodeNode.Attribute("ForegroundColor").Value,
+                        name));
+                    continue;
+                }
+                try
+                {
+                    bgColor = (Color)ColorConverter.ConvertFromString(effectCodeNode.Attribute("BackgroundColor").Value);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(string.Format(@"Invalid background color ""{0}"" for effect ""{1}""",  
+                        effectCodeNode.Attribute("BackgroundColor").Value,
+                        name));
+                    continue;
+                }
+
+
+
+                
                 Brush bgBrush = new SolidColorBrush(bgColor);
                 Brush fgBrush = new SolidColorBrush(fgColor);
 

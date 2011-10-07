@@ -3,7 +3,7 @@
   <EffectCode Name="Stunned" Code="X" BackgroundColor="#DDDDDD" ForegroundColor="Black" />
   <EffectCode Name="Slowed" Code="S" BackgroundColor="#EDEBB9" ForegroundColor="Black" />
   <EffectCode Name="Restrained" Code="R" BackgroundColor="#ED8B59" ForegroundColor="White" />
-  <EffectCode Name="Prone" Code="P" BackgroundColor="#666666" ForegroundColor="Prone" />
+  <EffectCode Name="Prone" Code="P" BackgroundColor="#666666" ForegroundColor="White" />
   <EffectCode Name="Petrified" Code="T" BackgroundColor="#55AA88" ForegroundColor="White" />
   <EffectCode Name="Marked" Code="M" BackgroundColor="#0000FF" ForegroundColor="White" />
   <EffectCode Name="Immobilized" Code="I" BackgroundColor="#333333" ForegroundColor="White" />
