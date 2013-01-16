@@ -24,8 +24,8 @@ namespace DnDEventLog
         #endregion
 
         #region ActorsViewSource - ListCollectionView
-        private ListCollectionView _ActorsView = null;
-        public ListCollectionView ActorsView
+        private ICollectionView _ActorsView = null;
+        public ICollectionView ActorsView
         {
             get { return _ActorsView; }
             set { _ActorsView = this.RaiseAndSetIfChanged(x => x.ActorsView, value); }
@@ -80,8 +80,9 @@ namespace DnDEventLog
                 .Value()
                 .Subscribe(x =>
             {
-                ActorsView = CollectionViewSource.GetDefaultView(Actors) as ListCollectionView;
-                ActorsView.SortDescriptions.Add(new SortDescription("Initiative", ListSortDirection.Descending));
+                var view = CollectionViewSource.GetDefaultView(Actors);
+                view.SortDescriptions.Add(new SortDescription("Initiative", ListSortDirection.Descending));
+                ActorsView = view;
             });
 
             Actors = new ReactiveCollection<Actor>();
