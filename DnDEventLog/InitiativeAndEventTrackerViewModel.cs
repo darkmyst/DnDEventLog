@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ReactiveUI;
 using System.Windows.Input;
 using ReactiveUI.Xaml;
@@ -76,7 +75,7 @@ namespace DnDEventLog
 
         public InitiativeAndEventTrackerViewModel()
         {
-            var actorsObservable = this.ObservableForProperty(x => x.Actors)
+            this.ObservableForProperty(x => x.Actors)
                 .Value()
                 .Subscribe(x =>
             {
@@ -132,7 +131,7 @@ namespace DnDEventLog
 
         private void StepToNextInitiative()
         {
-            if (Actors == null || Actors.Count() == 0)
+            if (Actors == null || !Actors.Any())
             {
                 CurrentInitiative = 0;
                 CurrentRound = 0;
@@ -149,7 +148,7 @@ namespace DnDEventLog
                         .SkipWhile(x => x.Key >= CurrentInitiative)
                         .FirstOrDefault();
 
-            if (actorsWithInitiative == null || actorsWithInitiative.Count() == 0)
+            if (actorsWithInitiative == null || !actorsWithInitiative.Any())
             {
                 CurrentRound++;
                 actorsWithInitiative =
@@ -159,7 +158,7 @@ namespace DnDEventLog
                             .FirstOrDefault();
             }
 
-            if (actorsWithInitiative == null || actorsWithInitiative.Count() == 0)
+            if (actorsWithInitiative == null || !actorsWithInitiative.Any())
             {
                 CurrentInitiative = 0;
                 CurrentRound = 0;
@@ -184,11 +183,11 @@ namespace DnDEventLog
             }
         }
 
-        private int actorNum = 0;
+        private int _ActorNum = 0;
         private void AddActor()
         {
-            var actor = new Actor() { Name = string.Format("Actor {0}", ++actorNum), Initiative = 0, HasInitiative = false, IsEnabled = true, IsDelayed = false, Notes = string.Empty };
-            EditActor editActorWindow = new EditActor(actor);
+            var actor = new Actor { Name = string.Format("Actor {0}", ++_ActorNum), Initiative = 0, HasInitiative = false, IsEnabled = true, IsDelayed = false, Notes = string.Empty };
+            var editActorWindow = new EditActor(actor);
             editActorWindow.ShowDialog();
             if (!string.IsNullOrWhiteSpace(actor.Name))
             {
@@ -200,9 +199,9 @@ namespace DnDEventLog
                 var delayedDisposable = actor.ObservableForProperty(x => x.IsDelayed).Where(x => !x.Value).Subscribe(x => SetActorInitiativeToCurrent(x.Sender));
 
                 if (!ActorObservableDisposables.ContainsKey(actor))
-                    ActorObservableDisposables.Add(actor, new List<IDisposable>() { enabledDisposable, delayedDisposable });
+                    ActorObservableDisposables.Add(actor, new List<IDisposable> { enabledDisposable, delayedDisposable });
                 else if (ActorObservableDisposables[actor] == null)
-                    ActorObservableDisposables[actor] = new List<IDisposable>() { enabledDisposable, delayedDisposable };
+                    ActorObservableDisposables[actor] = new List<IDisposable> { enabledDisposable, delayedDisposable };
                 else
                 {
                     ActorObservableDisposables[actor].Add(enabledDisposable);
@@ -217,7 +216,7 @@ namespace DnDEventLog
         {
             if (actor != null)
             {
-                EditActor editActorWindow = new EditActor(actor);
+                var editActorWindow = new EditActor(actor);
                 editActorWindow.ShowDialog();
                 if (actor.Initiative == CurrentInitiative)
                     actor.HasInitiative = true;

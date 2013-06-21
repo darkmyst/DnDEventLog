@@ -11,6 +11,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D20EventLog.Models.Test", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D20EventLog.ViewModels", "D20EventLog.ViewModels\D20EventLog.ViewModels.csproj", "{97746614-59B2-4E1A-92BD-1408CD238624}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8D3A35D9-90C7-4622-87CD-413C5A24785E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "D20", "D20", "{58BE8EA1-F417-4EA5-8355-9DE6B56CBB20}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{FC264778-AA0D-4AF4-A9D2-26FD5A75A914}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D20EventLog.Lib", "D20EventLog.Lib\D20EventLog.Lib.csproj", "{D815DF03-983D-4AC3-8164-6B3C5BFD621E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,8 +84,25 @@ Global
 		{97746614-59B2-4E1A-92BD-1408CD238624}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{97746614-59B2-4E1A-92BD-1408CD238624}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{97746614-59B2-4E1A-92BD-1408CD238624}.Release|x86.ActiveCfg = Release|Any CPU
+		{D815DF03-983D-4AC3-8164-6B3C5BFD621E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D815DF03-983D-4AC3-8164-6B3C5BFD621E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D815DF03-983D-4AC3-8164-6B3C5BFD621E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D815DF03-983D-4AC3-8164-6B3C5BFD621E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D815DF03-983D-4AC3-8164-6B3C5BFD621E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D815DF03-983D-4AC3-8164-6B3C5BFD621E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D815DF03-983D-4AC3-8164-6B3C5BFD621E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D815DF03-983D-4AC3-8164-6B3C5BFD621E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D815DF03-983D-4AC3-8164-6B3C5BFD621E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D815DF03-983D-4AC3-8164-6B3C5BFD621E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8F00804C-E0DC-4C6A-ABE8-41DD34A15F70} = {58BE8EA1-F417-4EA5-8355-9DE6B56CBB20}
+		{97746614-59B2-4E1A-92BD-1408CD238624} = {58BE8EA1-F417-4EA5-8355-9DE6B56CBB20}
+		{E3A4644D-43E2-49AF-9393-9CDADE803BEC} = {58BE8EA1-F417-4EA5-8355-9DE6B56CBB20}
+		{D815DF03-983D-4AC3-8164-6B3C5BFD621E} = {58BE8EA1-F417-4EA5-8355-9DE6B56CBB20}
+		{57DE8963-25A9-4E47-9B1B-D9CA0623667C} = {8D3A35D9-90C7-4622-87CD-413C5A24785E}
 	EndGlobalSection
 EndGlobal

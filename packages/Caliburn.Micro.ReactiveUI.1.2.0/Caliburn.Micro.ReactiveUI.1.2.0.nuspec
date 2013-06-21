@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Caliburn.Micro.ReactiveUI</id>
+    <version>1.2.0</version>
+    <title>Caliburn.Micro.ReactiveUI</title>
+    <authors>Damien Chaib</authors>
+    <owners>Damien Chaib</owners>
+    <projectUrl>https://github.com/dchaib/Caliburn.Micro.ReactiveUI</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This library provides Caliburn.Micro screens and conductors rewritten to inherit from ReactiveUI ReactiveObject</description>
+    <releaseNotes />
+    <copyright />
+    <language />
+    <dependencies>
+      <dependency id="reactiveui-core" version="4.3.0" />
+      <dependency id="Caliburn.Micro" version="1.4" />
+    </dependencies>
+  </metadata>
+</package>

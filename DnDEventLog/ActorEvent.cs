@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ReactiveUI;
+﻿using ReactiveUI;
 
 namespace DnDEventLog
 {
     public class ActorEvent : ReactiveObject
     {
-        protected static int nextEventID = 1;
+        protected static int NextEventID = 1;
 
         public ActorEvent()
         {
-            EventID = nextEventID++;
+            EventID = NextEventID++;
         }
 
         #region EventID - int
